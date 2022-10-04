@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 echo -e "Loading..."
-APP="Home Assistant"
+APP="Portainer"
 var_disk="16"
 var_cpu="2"
 var_ram="2048"
