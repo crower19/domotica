@@ -48,16 +48,18 @@ function msg_ok() {
     local msg="$1"
     echo -e "${BFR} ${CM} ${GN}${msg}${CL}"
 }
-
+user = ""
+port = ""
 clear
 header_info
 read -r -p "Create folder structure to mosquitto and zigbee2mqtt? <y/N> " prompt
 if [[ $prompt == "y" || $prompt == "Y" || $prompt == "yes" || $prompt == "Yes" ]]
 then
-read -r -p "Specify the user to use in the path. example: ubutnu " user
-if [[ $user != "" ]]
+read -r -p "Specify the user to use in the path. example: ubutnu " user_prompt
+if [[ $user_prompt != "" ]]
 then
 msg_info "Creating folder structures"
+$user=$user_prompt
 mkdir -p /home/$user/containers/mosquitto/{config,data,log}
 mkdir -p /home/$user/containers/zigbee2mqtt/data
 msg_ok "Folders created"
@@ -84,11 +86,12 @@ fi
 read -r -p "Create zigbee2mqtt config file? <y/N> " prompt
 if [[ $prompt == "y" || $prompt == "Y" || $prompt == "yes" || $prompt == "Yes" ]]
 then
-read -r -p "Specify the usb port? <ttyACM0/ttyUSB0> " port
-if [[ $port != "" ]]
+read -r -p "Specify the usb port? <ttyACM0/ttyUSB0> " port_prompt
+if [[ $port_prompt != "" ]]
 then
 msg_info "Creating file..."
 ip4=$(/sbin/ip -o -4 addr list eth0 | awk '{print $4}' | cut -d/ -f1)
+$port=$port_prompt
 cat <<EOF > /home/$user/containers/zigbee2mqtt/data/configuration.yaml
 homeassistant: true
 permit_join: true
