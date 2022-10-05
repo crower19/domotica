@@ -44,8 +44,8 @@ function msg_ok() {
     local msg="$1"
     echo -e "${BFR} ${CM} ${GN}${msg}${CL}"
 }
-user = ""
-port = ""
+user=""
+port=""
 clear
 header_info
 read -r -p "Create folder structure to mosquitto and zigbee2mqtt? <y/N> " prompt
