@@ -51,11 +51,11 @@ if [[ $user != "" ]]
 then
 msg_info "Creating folder structures"
 mkdir -p /home/$user/containers/mosquitto/{config,data,log}
-mkdir -p /home/$user/containers/zigbee2mqtt
+mkdir -p /home/$user/containers/zigbee2mqtt/data
 msg_ok "Folders created"
 fi
 
-read -r -p "Create mosquitto.conf? <y/N> " prompt
+read -r -p "Create Mosquitto Config File? <y/N> " prompt
 if [[ $prompt == "y" || $prompt == "Y" || $prompt == "yes" || $prompt == "Yes" ]]
 then
 msg_info "Creating file..."
@@ -74,7 +74,7 @@ fi
 
 
 
-read -r -p "Create configuration.yaml? <y/N> " port
+read -r -p "Create Zigbee2Mqtt Config File? <y/N> " port
 if [[ $prompt == "y" || $prompt == "Y" || $prompt == "yes" || $prompt == "Yes" ]]
 then
 read -r -p "Specify the usb port? <ttyACM0/ttyUSB0> " port
@@ -100,6 +100,6 @@ frontend: true
 
 EOF
 sleep 2
-msg_ok "Created file mosquitto.conf"
+msg_ok "Created file configuration.yaml"
 fi
 fi
