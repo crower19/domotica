@@ -6,16 +6,16 @@ services:
     container_name: mosquitto
     restart: always
     environment:
-      - PUID=0
-      - PGID=0
-      - TZ=Europe/Madrid
+      - PUID
+      - PGID
+      - TZ
     ports:
       - "1883:1883"
       - "9001:9001"
     volumes:
-      - /home/ubuntu/containers/mosquitto/config:/mosquitto/config
-      - /home/ubuntu/containers/mosquitto/data:/mosquitto/data
-      - /home/ubuntu/containers/mosquitto/log:/mosquitto/log
+      - /home/${USER}/containers/mosquitto/config:/mosquitto/config
+      - /home/${USER}/containers/mosquitto/data:/mosquitto/data
+      - /home/${USER}/containers/mosquitto/log:/mosquitto/log
       - /etc/localtime:/etc/localtime:ro
     user: "0:0"
   zigbee2mqtt:
@@ -23,18 +23,18 @@ services:
     image: koenkk/zigbee2mqtt
     restart: always
     volumes:
-      - /home/ubuntu/containers/zigbee2mqtt/data:/app/data
+      - /home/${USER}/containers/zigbee2mqtt/data:/app/data
       - /run/udev:/run/udev:ro
     ports:
       # Frontend port
       - 8080:8080
     environment:
-      - PUID=0
-      - PGID=0
-      - TZ=Europe/Madrid
+      - PUID
+      - PGID
+      - TZ
     devices:
       # Make sure this matched your adapter location
-      - /dev/ttyUSB0:/dev/ttyUSB0
+      - /dev/${USB_PORT}:/dev/${USB_PORT}
     group_add:
       - dialout
     user: 0:0
