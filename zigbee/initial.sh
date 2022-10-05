@@ -79,9 +79,7 @@ sleep 2
 msg_ok "Created file mosquitto.conf"
 fi
 
-
-
-read -r -p "Create zigbee2mqtt config file? <y/N> " port
+read -r -p "Create zigbee2mqtt config file? <y/N> " prompt
 if [[ $prompt == "y" || $prompt == "Y" || $prompt == "yes" || $prompt == "Yes" ]]
 then
 read -r -p "Specify the usb port? <ttyACM0/ttyUSB0> " port
