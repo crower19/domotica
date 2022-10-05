@@ -46,6 +46,9 @@ function msg_ok() {
 
 clear
 header_info
+read -r -p "Create folder structure to mosquitto and zigbee2mqtt? <y/N> " prompt
+if [[ $prompt == "y" || $prompt == "Y" || $prompt == "yes" || $prompt == "Yes" ]]
+then
 read -r -p "Specify the user to use in the path. example: ubutnu " user
 if [[ $user != "" ]]
 then
@@ -54,8 +57,9 @@ mkdir -p /home/$user/containers/mosquitto/{config,data,log}
 mkdir -p /home/$user/containers/zigbee2mqtt/data
 msg_ok "Folders created"
 fi
+fi
 
-read -r -p "Create Mosquitto Config File? <y/N> " prompt
+read -r -p "Create mosquitto config file? <y/N> " prompt
 if [[ $prompt == "y" || $prompt == "Y" || $prompt == "yes" || $prompt == "Yes" ]]
 then
 msg_info "Creating file..."
@@ -74,7 +78,7 @@ fi
 
 
 
-read -r -p "Create Zigbee2Mqtt Config File? <y/N> " port
+read -r -p "Create zigbee2mqtt config file? <y/N> " port
 if [[ $prompt == "y" || $prompt == "Y" || $prompt == "yes" || $prompt == "Yes" ]]
 then
 read -r -p "Specify the usb port? <ttyACM0/ttyUSB0> " port
