@@ -11,9 +11,9 @@ services:
     links: 
       - "db:mariadb"
     environment:
-      - TZ=Europe/Madrid
+      - TZ
     volumes:
-      - /home/ubuntu/containers/home_assistant:/config
+      - /home/${USER}/containers/home_assistant:/config
       - /etc/localtime:/etc/localtime:ro
     restart: always
     privileged: true
@@ -26,13 +26,13 @@ services:
     image: mariadb
     restart: always
     environment:
-      - PUID=0
-      - PGID=0
-      - TZ=Europe/Madrid
-      - MARIADB_ROOT_PASSWORD=C0mpl3xRoot
-      - MARIADB_DATABASE=homeassistant
-      - MARIADB_USER=ha_user
-      - MARIADB_PASSWORD=C0mpl3x 
+      - PUID
+      - PGID
+      - TZ
+      - MARIADB_ROOT_PASSWORD
+      - MARIADB_DATABASE
+      - MARIADB_USER
+      - MARIADB_PASSWORD
     volumes:
       - /home/ubuntu/containers/mariadb:/var/lib/mysql
     ports:
@@ -49,7 +49,7 @@ services:
     environment:
       - PMA_HOST=db
       - PMA_PORT=3306
-      - TZ=Europe/Madrid
+      - TZ
   
   # Node-RED  
   node-red:
@@ -57,25 +57,25 @@ services:
     image: nodered/node-red:latest
     restart: always
     environment:
-      - PUID=0
-      - PGID=0
-      - TZ=Europe/Madrid
+      - PUID
+      - PGID
+      - TZ
     ports:
       - "1880:1880"
     volumes:
-      - /home/ubuntu/containers/nodered:/data
+      - /home/${USER}/containers/nodered:/data
   # Visual Studio code
   vscode:
     image: lscr.io/linuxserver/code-server:latest
     container_name: vscode
     environment:
-      - PUID=0
-      - PGID=0
-      - TZ=Europe/Madrid
+      - PUID
+      - PGID
+      - TZ
       - DEFAULT_WORKSPACE=/workspace
     volumes:
-      - /home/ubuntu/containers/vscode:/config
-      - /home/ubuntu/containers/home_assistant:/workspace
+      - /home/${USER}/containers/vscode:/config
+      - /home/${USER}/containers/home_assistant:/workspace
     ports:
       - 8443:8443
     restart: always
@@ -84,13 +84,13 @@ services:
     image: lscr.io/linuxserver/duplicati:latest
     container_name: duplicati
     environment:
-      - PUID=0
-      - PGID=0
-      - TZ=Europe/Madrid
+      - PUID
+      - PGID
+      - TZ
     volumes:
-      - /home/ubuntu/containers/duplicati:/config
+      - /home/${USER}/containers/duplicati:/config
       - /opt/backups:/backups
-      - /home/ubuntu/containers:/source
+      - /home/${USER}/containers:/source
     ports:
       - 8200:8200
     restart: always
