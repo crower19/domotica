@@ -72,3 +72,34 @@ sleep 2
 msg_ok "Created file mosquitto.conf"
 fi
 
+
+
+read -r -p "Create configuration.yaml? <y/N> " port
+if [[ $prompt == "y" || $prompt == "Y" || $prompt == "yes" || $prompt == "Yes" ]]
+then
+read -r -p "Specify the usb port? <ttyACM0/ttyUSB0> " port
+if [[ $port != "" ]]
+then
+msg_info "Creating file..."
+ip4=$(/sbin/ip -o -4 addr list eth0 | awk '{print $4}' | cut -d/ -f1)
+cat <<EOF > /home/$user/containers/zigbee2mqtt/data/configuration.yaml
+homeassistant: true
+permit_join: true
+availability:
+  active:
+    timeout: 10
+  passive:
+    timeout: 1500
+mqtt:
+  server: mqtt://$ip4:1883
+advanced:
+  last_seen: ISO_8601_local
+serial:
+  port: /dev/$port
+frontend: true
+
+EOF
+sleep 2
+msg_ok "Created file mosquitto.conf"
+fi
+fi
