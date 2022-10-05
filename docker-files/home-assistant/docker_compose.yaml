@@ -1,0 +1,96 @@
+---
+version: '3.7'
+networks:
+  vnet:
+    driver: bridge
+services:
+  # HomeAssistant
+  homeassistant:
+    container_name: homeassistant
+    image: "ghcr.io/home-assistant/home-assistant:stable"
+    links: 
+      - "db:mariadb"
+    environment:
+      - TZ=Europe/Madrid
+    volumes:
+      - /home/ubuntu/containers/home_assistant:/config
+      - /etc/localtime:/etc/localtime:ro
+    restart: always
+    privileged: true
+    network_mode: host
+    ports:
+      - "8123:8123"
+  #MariaDB
+  db:
+    container_name: mariadb
+    image: mariadb
+    restart: always
+    environment:
+      - PUID=0
+      - PGID=0
+      - TZ=Europe/Madrid
+      - MARIADB_ROOT_PASSWORD=C0mpl3xRoot
+      - MARIADB_DATABASE=homeassistant
+      - MARIADB_USER=ha_user
+      - MARIADB_PASSWORD=C0mpl3x 
+    volumes:
+      - /home/ubuntu/containers/mariadb:/var/lib/mysql
+    ports:
+      - "3306:3306"
+  #PHPMyAdmin
+  phpmyadmin:
+    container_name: phpmyadmin
+    image: phpmyadmin
+    restart: always
+    expose:
+      - "40001"
+    ports:
+      - "40001:80"
+    environment:
+      - PMA_HOST=db
+      - PMA_PORT=3306
+      - TZ=Europe/Madrid
+  
+  # Node-RED  
+  node-red:
+    container_name: nodered
+    image: nodered/node-red:latest
+    restart: always
+    environment:
+      - PUID=0
+      - PGID=0
+      - TZ=Europe/Madrid
+    ports:
+      - "1880:1880"
+    volumes:
+      - /home/ubuntu/containers/nodered:/data
+  # Visual Studio code
+  vscode:
+    image: lscr.io/linuxserver/code-server:latest
+    container_name: vscode
+    environment:
+      - PUID=0
+      - PGID=0
+      - TZ=Europe/Madrid
+      - DEFAULT_WORKSPACE=/workspace
+    volumes:
+      - /home/ubuntu/containers/vscode:/config
+      - /home/ubuntu/containers/home_assistant:/workspace
+    ports:
+      - 8443:8443
+    restart: always
+  # Duplicati Backups 
+  duplicati:
+    image: lscr.io/linuxserver/duplicati:latest
+    container_name: duplicati
+    environment:
+      - PUID=0
+      - PGID=0
+      - TZ=Europe/Madrid
+    volumes:
+      - /home/ubuntu/containers/duplicati:/config
+      - /opt/backups:/backups
+      - /home/ubuntu/containers:/source
+    ports:
+      - 8200:8200
+    restart: always
