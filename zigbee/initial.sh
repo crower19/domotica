@@ -55,7 +55,7 @@ read -r -p "Specify the user to use in the path. example: ubutnu " user_prompt
 if [[ $user_prompt != "" ]]
 then
 msg_info "Creating folder structures"
-user=$user_prompt
+user="$user_prompt"
 mkdir -p /home/$user/containers/mosquitto/{config,data,log}
 mkdir -p /home/$user/containers/zigbee2mqtt/data
 msg_ok "Folders created"
@@ -87,7 +87,7 @@ if [[ $port_prompt != "" ]]
 then
 msg_info "Creating file..."
 ip4=$(/sbin/ip -o -4 addr list eth0 | awk '{print $4}' | cut -d/ -f1)
-port=$port_prompt
+port="$port_prompt"
 cat <<EOF > /home/$user/containers/zigbee2mqtt/data/configuration.yaml
 homeassistant: true
 permit_join: true
