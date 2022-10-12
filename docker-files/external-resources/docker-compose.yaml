@@ -1,0 +1,51 @@
+---
+version: '3.7'
+networks:
+  vnet:
+    driver: bridge
+services:
+  # Node-RED  
+  node-red:
+    container_name: nodered
+    image: nodered/node-red:latest
+    restart: unless-stopped
+    environment:
+      - PUID
+      - PGID
+      - TZ
+    ports:
+      - "1880:1880"
+    volumes:
+      - /home/${USER}/containers/nodered:/data
+  
+  # Visual Studio code
+  vscode:
+    image: lscr.io/linuxserver/code-server:latest
+    container_name: vscode
+    environment:
+      - PUID
+      - PGID
+      - TZ
+      - DEFAULT_WORKSPACE=/workspace
+    volumes:
+      - /home/${USER}/containers/vscode:/config
+      - /home/${USER}/containers/home_assistant:/workspace
+    ports:
+      - 8443:8443
+    restart: unless-stopped
+  
+  # Duplicati Backups 
+  duplicati:
+    image: lscr.io/linuxserver/duplicati:latest
+    container_name: duplicati
+    environment:
+      - PUID
+      - PGID
+      - TZ
+    volumes:
+      - /home/${USER}/containers/duplicati:/config
+      - /opt/backups:/backups
+      - /home/${USER}/containers:/source
+    ports:
+      - 8200:8200
+    restart: unless-stopped
