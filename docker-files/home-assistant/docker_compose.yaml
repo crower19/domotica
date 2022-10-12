@@ -8,8 +8,6 @@ services:
   homeassistant:
     container_name: homeassistant
     image: "ghcr.io/home-assistant/home-assistant:stable"
-    links: 
-      - "db:mariadb"
     environment:
       - TZ
     volumes:
@@ -17,80 +15,6 @@ services:
       - /etc/localtime:/etc/localtime:ro
     restart: always
     privileged: true
-    network_mode: host
+    network_mode: unless-stopped
     ports:
-      - "8123:8123"
-  #MariaDB
-  db:
-    container_name: mariadb
-    image: mariadb
-    restart: always
-    environment:
-      - PUID
-      - PGID
-      - TZ
-      - MARIADB_ROOT_PASSWORD
-      - MARIADB_DATABASE
-      - MARIADB_USER
-      - MARIADB_PASSWORD
-    volumes:
-      - /home/ubuntu/containers/mariadb:/var/lib/mysql
-    ports:
-      - "3306:3306"
-  #PHPMyAdmin
-  phpmyadmin:
-    container_name: phpmyadmin
-    image: phpmyadmin
-    restart: always
-    expose:
-      - "40001"
-    ports:
-      - "40001:80"
-    environment:
-      - PMA_HOST=db
-      - PMA_PORT=3306
-      - TZ
-  
-  # Node-RED  
-  node-red:
-    container_name: nodered
-    image: nodered/node-red:latest
-    restart: always
-    environment:
-      - PUID
-      - PGID
-      - TZ
-    ports:
-      - "1880:1880"
-    volumes:
-      - /home/${USER}/containers/nodered:/data
-  # Visual Studio code
-  vscode:
-    image: lscr.io/linuxserver/code-server:latest
-    container_name: vscode
-    environment:
-      - PUID
-      - PGID
-      - TZ
-      - DEFAULT_WORKSPACE=/workspace
-    volumes:
-      - /home/${USER}/containers/vscode:/config
-      - /home/${USER}/containers/home_assistant:/workspace
-    ports:
-      - 8443:8443
-    restart: always
-  # Duplicati Backups 
-  duplicati:
-    image: lscr.io/linuxserver/duplicati:latest
-    container_name: duplicati
-    environment:
-      - PUID
-      - PGID
-      - TZ
-    volumes:
-      - /home/${USER}/containers/duplicati:/config
-      - /opt/backups:/backups
-      - /home/${USER}/containers:/source
-    ports:
-      - 8200:8200
-    restart: always
+      - "8123:8123
