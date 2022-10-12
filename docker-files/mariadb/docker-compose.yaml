@@ -1,0 +1,34 @@
+---
+version: '3.7'
+networks:
+  vnet:
+    driver: bridge
+services:
+  #MariaDB
+  db:
+    container_name: mariadb
+    image: mariadb
+    restart: unless-stopped
+    environment:
+      - TZ
+      - MARIADB_ROOT_PASSWORD
+      - MARIADB_DATABASE
+      - MARIADB_USER
+      - MARIADB_PASSWORD
+    volumes:
+      - /home/${USER}/containers/mariadb:/var/lib/mysql
+    ports:
+      - "3306:3306"
+  #PHPMyAdmin
+  phpmyadmin:
+    container_name: phpmyadmin
+    image: phpmyadmin
+    restart: unless-stopped
+    expose:
+      - "40001"
+    ports:
+      - "40001:80"
+    environment:
+      - PMA_HOST=db
+      - PMA_PORT=3306
+      - TZ
