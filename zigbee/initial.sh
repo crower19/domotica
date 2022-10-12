@@ -85,8 +85,12 @@ then
 read -r -p "Specify the usb port? <ttyACM0/ttyUSB0> " port_prompt
 if [[ $port_prompt != "" ]]
 then
+read -r -p "Specify the ethernet port? <eth0/ens18> " net_prompt
+if [[ $net_prompt != "" ]]
+then
 msg_info "Creating file..."
-ip4=$(/sbin/ip -o -4 addr list eth0 | awk '{print $4}' | cut -d/ -f1)
+net="$net_prompt"
+ip4=$(/sbin/ip -o -4 addr list $net | awk '{print $4}' | cut -d/ -f1)
 port="$port_prompt"
 cat <<EOF > /home/$user/containers/zigbee2mqtt/data/configuration.yaml
 homeassistant: true
@@ -107,5 +111,6 @@ frontend: true
 EOF
 sleep 2
 msg_ok "Created file configuration.yaml"
+fi
 fi
 fi
