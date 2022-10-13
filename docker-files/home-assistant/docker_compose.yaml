@@ -17,4 +17,4 @@ services:
     privileged: true
     network_mode: unless-stopped
     ports:
-      - "8123:8123
+      - "8123:8123"
