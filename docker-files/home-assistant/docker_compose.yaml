@@ -13,8 +13,8 @@ services:
     volumes:
       - /home/${USER}/containers/home_assistant:/config
       - /etc/localtime:/etc/localtime:ro
-    restart: always
+    restart: unless-stopped
     privileged: true
-    network_mode: unless-stopped
+    network_mode: host
     ports:
       - "8123:8123"
