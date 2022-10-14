@@ -31,5 +31,7 @@ services:
     environment:
       - PMA_HOST
       - PMA_PORT
+      - PMA_USER
+      - PMA_PASSWORD
       - UPLOAD_LIMIT
       - TZ
