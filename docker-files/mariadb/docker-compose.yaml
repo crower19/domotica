@@ -29,7 +29,7 @@ services:
     ports:
       - "40001:80"
     environment:
-      - PMA_HOST=192.168.1.91
-      - PMA_PORT=3306
-      - UPLOAD_LIMIT=900M
+      - PMA_HOST
+      - PMA_PORT
+      - UPLOAD_LIMIT
       - TZ
