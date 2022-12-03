@@ -1,0 +1,58 @@
+version: "3.9"
+services:
+  netbox:
+    container_name: netbox
+    image: lscr.io/linuxserver/netbox:latest
+    depends_on:
+      - postgres
+      - redis
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Madrid
+      - ALLOWED_HOST
+      - SUPERUSER_EMAIL
+      - SUPERUSER_PASSWORD
+      - SUPERUSER_NAME
+      - DB_NAME
+      - DB_USER
+      - DB_PASSWORD
+      - DB_HOST
+      - DB_PORT
+      - REDIS_HOST
+      - REDIS_PORT
+      - REDIS_DB_TASK
+      - REDIS_DB_CACHE
+
+    volumes:
+      - netbox-data:/etc/netbox/config:rw
+    ports:
+      - 8443:8000
+    restart: unless-stopped
+
+  # postgres
+  postgres:
+    container_name: postgres
+    image: postgres:14-alpine
+    environment:
+      - POSTGRES_DB
+      - POSTGRES_PASSWORD
+      - POSTGRES_USER
+    volumes:
+      - netbox-postgres-data:/var/lib/postgresql/data
+
+  # redis
+  redis:
+    container_name: redis
+    hostname: redis
+    image: redis
+
+    volumes:
+      - netbox-new-redis-data:/data
+volumes:
+  netbox-data:
+    driver: local
+  netbox-postgres-data:
+    driver: local
+  netbox-new-redis-data:
+    driver: local
