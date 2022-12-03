@@ -1,0 +1,130 @@
+# Broker MQTT
+mqtt:
+  host: 192.168.5.102
+  port: 1883
+  topic_prefix: frigate
+  client_id: frigate
+  user: mqtt_user
+  password: mqtt_pass
+
+# Ruta de base de datos
+database:
+  path: /db/frigate.db
+
+# Aceleracion por hardware para AMD
+# ffmpeg:
+#   global_args: 
+#     - -hide_banner 
+#     - -loglevel 
+#     - warning
+  
+#   hwaccel_args: 
+#    - -hwaccel 
+#    - vaapi 
+#    - -hwaccel_device 
+#    - /dev/dri/renderD128
+#    - -hwaccel_output_format
+#    - yuv420p
+  
+#   input_args:
+#         - -avoid_negative_ts
+#         - make_zero
+#         - -fflags
+#         - nobuffer+genpts+discardcorrupt
+#         - -rtsp_transport
+#         - tcp
+#         - -flags
+#         - low_delay
+#         - -strict
+#         - experimental
+#         - -analyzeduration
+#         - 1000M
+#         - -probesize
+#         - 1000M
+      
+  #output_args:
+  #    detect: -f rawvideo -pix_fmt yuv420p
+  #    record: -f segment -segment_time 20 -segment_format mp4 -reset_timestamps 1 -strftime 1 -c copy -an
+  #    rtmp: -c copy -f flv
+
+# Acelerador Coral Edge
+detectors:
+  coral:
+    type: edgetpu
+    device: usb
+
+# Snapshot para notificaciones
+snapshots:
+  enabled: True
+  timestamp: False
+  bounding_box: True
+  retain:
+    default: 180
+
+# Configuracion de deteccion de movimiento
+motion:
+  threshold: 25 # <--- Cuanto mas alto menos falsos positivos pero tambien perderemos eventos reales
+  contour_area: 100 # <--- Tamano minimo de deteccion (evitamos falsos positivos por ruido digital en la imagen)
+
+# Configuracion de deteccion de objetos
+objects: # <--- Lista de objetos a rastrear
+  track:
+    - person
+    - cat
+  filters: # <--- Filtros para reducir falsos positivos
+    person:
+      min_area: 500 # <--- Tamano minimo de alto*ancho en pixeles del objeto
+      min_score: 0.5 # <--- Confianza minima para empezar a trackear
+      threshold: 0.7 # <--- Confianza minima para empezar evento
+    cat:
+      min_area: 200 # <--- Tamano minimo de alto*ancho en pixeles del objeto
+      min_score: 0.5 # <--- Confianza minima para empezar a trackear
+      threshold: 0.6 # <--- Confianza minima para empezar evento
+
+# Configuracion para grabacion continua y/o almacenar eventos
+record:
+  enabled: True
+  retain:
+    days: 30
+    mode: all
+  events:
+    retain:
+      default: 60
+
+# Configuracion de birdseye
+birdseye:
+  enabled: True
+  mode: continuous
+
+# Configuracion de las camaras
+cameras:
+  patio1:
+    ffmpeg:  
+      inputs:
+        - path: rtsp://admin:P4ssw0rd@192.168.6.51:554/h264Preview_01_main
+          roles:
+            - record
+        - path: rtsp://admin:P4ssw0rd@192.168.6.51:554/h264Preview_01_sub
+          roles:
+            - detect 
+    rtmp:
+      enabled: False  
+    detect:
+      width: 640
+      height: 360
+      fps: 7
+  patio2:
+    ffmpeg:  
+      inputs:
+        - path: rtsp://admin:P4ssw0rd@192.168.6.52:554/h264Preview_01_main
+          roles:
+            - record
+        - path: rtsp://admin:P4ssw0rd@192.168.6.52:554/h264Preview_01_sub
+          roles:
+            - detect 
+    rtmp:
+      enabled: False   
+    detect:
+      width: 640
+      height: 480
+      fps: 7
