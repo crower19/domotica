@@ -3,6 +3,7 @@ services:
   netbox:
     container_name: netbox
     image: lscr.io/linuxserver/netbox:latest
+    restart: unless-stopped
     depends_on:
       - postgres
       - redis
@@ -28,12 +29,12 @@ services:
       - netbox-data:/etc/netbox/config:rw
     ports:
       - 8443:8000
-    restart: unless-stopped
 
   # postgres
   postgres:
     container_name: postgres
     image: postgres:14-alpine
+    restart: unless-stopped
     environment:
       - POSTGRES_DB
       - POSTGRES_PASSWORD
@@ -46,7 +47,7 @@ services:
     container_name: redis
     hostname: redis
     image: redis
-
+    restart: unless-stopped
     volumes:
       - netbox-new-redis-data:/data
 volumes:
